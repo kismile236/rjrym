@@ -20,7 +20,7 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
 	Text = "kismile制作",
 	Duration = 5;
 })
-
+wait(2)
 local Players = game:GetService("Players")  
 local workspace = game:GetService("Workspace")  
 local Player = Players.LocalPlayer  
@@ -418,3 +418,28 @@ attackTab:Toggle("加速开关", "TranslateAccelToggle", false, function(State)
     end
 end)
 
+
+
+
+local old
+old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(function(self, ...)
+        local method = getnamecallmethod()
+        local args = {...}
+        if method == "SetCore" and args[1] == "SendNotification" then
+            local options = args[2]
+            if type(options) == "table" and 
+               tostring(options.Title) == "人挤人脚本" and 
+               tostring(options.Text) == "kismile制作" 
+            then
+                local modifiedOptions = table.clone(options)
+                modifiedOptions.Text = "1"
+            end
+        end
+     return old(self, ...)
+end))
+
+game:GetService("StarterGui"):SetCore("SendNotification",{
+	Title = "人挤人脚本",
+	Text = "加载完成 祝您使用愉快",
+	Duration = 5;
+})
