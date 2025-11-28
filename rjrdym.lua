@@ -20,7 +20,7 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
 	Text = "kismile制作",
 	Duration = 5;
 })
-wait(2)
+wait(0.5)
 local Players = game:GetService("Players")  
 local workspace = game:GetService("Workspace")  
 local Player = Players.LocalPlayer  
