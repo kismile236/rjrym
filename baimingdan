@@ -28,5 +28,5 @@ if isLocalPlayerWhitelisted then
     })
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile36/xing/refs/heads/main/rjr/wjmrjr"))()
 else
-    localPlayer:Kick("你没有被加入白名单")
+    localPlayer:Kick("你个死爹烂妈的没在白名单里")
 end
