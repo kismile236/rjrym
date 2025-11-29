@@ -15,6 +15,20 @@ old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(fu
      return old(self, ...)
 end))
 
+local attackTab = UITab3:section("大佛功能区",true)
+
+about:Toggle("自动v4", "Toggle", false, function(IsEnabled)
+    if IsEnabled then
+        task.spawn(function()
+            while IsEnabled do
+                local args = {true}
+                game:GetService("Players").LocalPlayer:WaitForChild("Backpack"):WaitForChild("Awakening"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+                task.wait(1)
+            end
+        end)
+    end
+end)
+
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "人挤人脚本",
 	Text = "kismile制作",
