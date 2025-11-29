@@ -1,0 +1,28 @@
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local WhitelistedPlayers = {
+    ["MeiQin_0917"] = true,
+    ["iqcnmbj"] = true,
+    ["liwenqi2013"] = true,
+    ["Mas_Yesa"] = true,
+    ["YNN_9453"] = true,
+}
+
+local function IsWhitelisted(player)
+    return WhitelistedPlayers[player.Name] or false
+end
+
+local localPlayer = Players.LocalPlayer
+
+local isLocalPlayerWhitelisted = IsWhitelisted(localPlayer)
+
+if isLocalPlayerWhitelisted then
+    StarterGui:SetCore("SendNotification", {
+        Title = "白名单认证",
+        Text = "玩家:"..localPlayer.Name.."，检测完毕白名单玩家，稍后会加载脚本",
+        Duration = 7,
+    })
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile36/xing/refs/heads/main/rjr/wjmrjr"))()
+else
+    localPlayer:Kick("你没有被加入白名单")
+end
