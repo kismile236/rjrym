@@ -44,28 +44,6 @@ about:Slider("视角缩放距离", "Slider",  128, 128, 10000, false, function(V
     game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = Value
 end)
 
--- 速度v1
-
-about:Textbox("快速跑步设置", "WalkSpeed", "输入速度值", function(Value)
-    local tspeed = tonumber(Value)
-    if tspeed then
-        local hb = game:GetService("RunService").Heartbeat
-        local tpwalking = true
-        local player = game:GetService("Players")
-        local lplr = player.LocalPlayer
-        local chr = lplr.Character
-        local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
-        while tpwalking and hb:Wait() and chr and hum and hum.Parent do
-          if hum.MoveDirection.Magnitude > 0 then
-            if tspeed then
-              chr:TranslateBy(hum.MoveDirection * tspeed)
-            else
-              chr:TranslateBy(hum.MoveDirection)
-            end
-          end
-        end
-    end
-end)
 
 -- 缝合
 
