@@ -45,6 +45,20 @@ local about = UITab2:section("超级无敌脚本",true)
 about:Slider("视角缩放距离", "Slider",  128, 128, 10000, false, function(Value)
     game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = Value
 end)
+-- 自动v4
+
+about:Toggle("自动v4", "Toggle", false, function(IsEnabled)
+    if IsEnabled then
+        task.spawn(function()
+            while IsEnabled do
+                local args = {true}
+                game:GetService("Players").LocalPlayer:WaitForChild("Backpack"):WaitForChild("Awakening"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+                task.wait() -- 基础间隔，可自行修改数值（如task.wait(0.5)）
+            end
+        end)
+    end
+end)
+
 
 
 -- 缝合
@@ -399,19 +413,6 @@ attackTab:Toggle("加速开关", "TranslateAccelToggle", false, function(State)
 end)
 
 
-local about = UITab3:section("大佛功能区",true)
-
-about:Toggle("自动v4", "Toggle", false, function(IsEnabled)
-    if IsEnabled then
-        task.spawn(function()
-            while IsEnabled do
-                local args = {true}
-                game:GetService("Players").LocalPlayer:WaitForChild("Backpack"):WaitForChild("Awakening"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
-                task.wait(1)
-            end
-        end)
-    end
-end)
 
 
 
