@@ -412,10 +412,6 @@ attackTab:Toggle("加速开关", "TranslateAccelToggle", false, function(State)
     end
 end)
 
-
-
-
-
 local old
 old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(function(self, ...)
         local method = getnamecallmethod()
