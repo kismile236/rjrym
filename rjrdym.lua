@@ -15,7 +15,7 @@ old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(fu
      return old(self, ...)
 end))
 
-local attackTab = UITab3:section("大佛功能区",true)
+local about = UITab3:section("大佛功能区",true)
 
 about:Toggle("自动v4", "Toggle", false, function(IsEnabled)
     if IsEnabled then
