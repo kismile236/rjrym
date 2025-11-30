@@ -12,6 +12,8 @@ local WhitelistedPlayers = {
     ["GH_nmmb"] = true,
     ["Racseouan"] = true,
     ["net789456789"] = true,
+    ["YANG0523l"] = true,
+    ["YANG0523l2"] = true,
 }
 
 local function IsWhitelisted(player)
