@@ -53,7 +53,7 @@ about:Toggle("自动v4", "Toggle", false, function(IsEnabled)
             while IsEnabled do
                 local args = {true}
                 game:GetService("Players").LocalPlayer:WaitForChild("Backpack"):WaitForChild("Awakening"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
-                task.wait() -- 基础间隔，可自行修改数值（如task.wait(0.5)）
+                task.wait(1) -- 基础间隔，可自行修改数值（如task.wait(0.5)）
             end
         end)
     end
