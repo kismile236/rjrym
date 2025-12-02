@@ -47,19 +47,57 @@ about:Slider("视角缩放距离", "Slider",  128, 128, 10000, false, function(V
 end)
 -- 自动v4
 
-about:Toggle("自动v4", "Toggle", false, function(IsEnabled)
-    if IsEnabled then
-        task.spawn(function()
-            while IsEnabled do
-                local args = {true}
-                game:GetService("Players").LocalPlayer:WaitForChild("Backpack"):WaitForChild("Awakening"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
-                task.wait(1) -- 基础间隔，可自行修改数值（如task.wait(0.5)）
+local toggleKey = "自动v4"
+local autoV4Task = nil
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local function getToggleState(key)
+    if not _G.ToggleStates then _G.ToggleStates = {} end
+    return _G.ToggleStates[key] or false
+end
+
+local function callAwakeningRemote()
+    local Backpack = LocalPlayer:FindFirstChild("Backpack")
+    if not Backpack then return end
+    
+    local Awakening = Backpack:FindFirstChild("Awakening")
+    if not Awakening then return end
+    
+    local RemoteFunc = Awakening:FindFirstChild("RemoteFunction")
+    if not RemoteFunc or not RemoteFunc:IsA("RemoteFunction") then return end
+    
+    local success, err = pcall(function()
+        RemoteFunc:InvokeServer(true)
+    end)
+    if not success then
+        warn("自动v4调用失败：", err)
+    end
+end
+
+local function toggleAutoV4(enable)
+    if autoV4Task then
+        task.cancel(autoV4Task)
+        autoV4Task = nil
+    end
+    
+    if enable then
+        autoV4Task = task.spawn(function()
+            while getToggleState(toggleKey) do
+                callAwakeningRemote()
+                task.wait(1) 
             end
+            autoV4Task = nil
         end)
     end
+end
+
+about:Toggle(toggleKey, "Toggle", false, function(IsEnabled)
+    if not _G.ToggleStates then _G.ToggleStates = {} end
+    _G.ToggleStates[toggleKey] = IsEnabled
+    
+    toggleAutoV4(IsEnabled)
 end)
-
-
 
 -- 缝合
 
