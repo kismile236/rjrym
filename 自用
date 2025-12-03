@@ -16,6 +16,16 @@ old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(fu
 end))
 
 
+local main = require(game:GetService("ReplicatedStorage").Util.CameraShaker.Main)
+local returnnil = function() return nil end
+
+main.StartShake = returnnil
+main.ShakeOnce = returnnil
+main.ShakeSustain = returnnil
+main.CameraShakeInstance = returnnil
+main.Shake = returnnil
+main.Start = returnnil
+
 
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "人挤人脚本",
