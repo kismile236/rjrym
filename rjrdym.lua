@@ -31,6 +31,7 @@ local win = ui:new("人挤人中心")
 local UITab1 = win:Tab("公告",'7734068321')
 local UITab2 = win:Tab("超级无敌脚本",'7734068321')
 local UITab3 = win:Tab("大佛功能区",'7734068321')
+local UITab4 = win:Tab("透视",'7734068321')
 
 local about = UITab1:section("公告",true)
 
@@ -449,6 +450,237 @@ attackTab:Toggle("加速开关", "TranslateAccelToggle", false, function(State)
         end
     end
 end)
+
+--透视
+
+local about = UITab4:section("透视",true)
+
+
+about:Toggle("显示", "ESP_PlayerDisplay", false, function(Value)
+    if Value then
+        local success, err = pcall(function()
+            local Players = game:GetService("Players")
+            local RunService = game:GetService("RunService")
+
+            local ESP_Enabled = true
+            local ShowDistance = true
+
+            local ESP_Objects = {}
+            local Connections = {}
+
+            local function CreateNameTag(player, character)
+                if not character then return nil end
+                
+                local head = character:FindFirstChild("Head")
+                if not head then return nil end
+                
+                -- 核心修改：缩小BillboardGui尺寸（从200x50改为120x30）
+                local billboard = Instance.new("BillboardGui")
+                billboard.Name = "ESP_NameTag_" .. player.UserId
+                billboard.Size = UDim2.new(0, 120, 0, 30)  -- 原尺寸：UDim2.new(0, 200, 0, 50)
+                billboard.StudsOffset = Vector3.new(0, 3, 0)  -- 位置可根据需要微调，比如改为2.5
+                billboard.AlwaysOnTop = true
+                billboard.Adornee = head
+                
+                local frame = Instance.new("Frame")
+                frame.Size = UDim2.new(1, 0, 1, 0)
+                frame.BackgroundTransparency = 0.7
+                frame.BackgroundColor3 = Color3.new(0, 0, 0)
+                frame.BorderSizePixel = 0
+                frame.Parent = billboard
+                
+                local nameLabel = Instance.new("TextLabel")
+                nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+                nameLabel.BackgroundTransparency = 1
+                nameLabel.Text = player.Name
+                nameLabel.TextColor3 = Color3.new(1, 1, 1)
+                nameLabel.TextScaled = true
+                nameLabel.Font = Enum.Font.GothamBold
+                nameLabel.TextStrokeTransparency = 0
+                nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                -- 限制文字最大尺寸，避免缩放过大
+                nameLabel.TextSize = 14  -- 文字大小
+                nameLabel.Parent = frame
+                
+                local distanceLabel = Instance.new("TextLabel")
+                distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)
+                distanceLabel.Position = UDim2.new(0, 0, 0.5, 0)
+                distanceLabel.BackgroundTransparency = 1
+                distanceLabel.TextColor3 = Color3.new(1, 1, 0)
+                distanceLabel.TextScaled = true
+                distanceLabel.Font = Enum.Font.Gotham
+                distanceLabel.TextStrokeTransparency = 0
+                distanceLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                -- 距离文字大小
+                distanceLabel.TextSize = 12  -- 文字大小
+                distanceLabel.Parent = frame
+                
+                local localPlayer = Players.LocalPlayer
+                if localPlayer.Team and player.Team then
+                    if localPlayer.Team == player.Team then
+                        nameLabel.TextColor3 = Color3.new(0, 1, 0)
+                    else
+                        nameLabel.TextColor3 = Color3.new(1, 0, 0)
+                    end
+                end
+                
+                billboard.Parent = head
+                
+                return {
+                    billboard = billboard,
+                    nameLabel = nameLabel,
+                    distanceLabel = distanceLabel,
+                    character = character
+                }
+            end
+
+            local function ClearPlayerESP(player)
+                if ESP_Objects[player] then
+                    if ESP_Objects[player].billboard and ESP_Objects[player].billboard.Parent then
+                        ESP_Objects[player].billboard:Destroy()
+                    end
+                    ESP_Objects[player] = nil
+                end
+            end
+
+            local function UpdateESP()
+                if not ESP_Enabled then return end
+                
+                local localPlayer = Players.LocalPlayer
+                local localCharacter = localPlayer.Character
+                if not localCharacter then return end
+                
+                local localHead = localCharacter:FindFirstChild("Head")
+                if not localHead then return end
+                
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= localPlayer then
+                        local character = player.Character
+                        
+                        if character and character:FindFirstChild("Humanoid") then
+                            local humanoid = character:FindFirstChildOfClass("Humanoid")
+                            local head = character:FindFirstChild("Head")
+                            
+                            if humanoid and head and humanoid.Health > 0 then
+                                local distance = (localHead.Position - head.Position).Magnitude
+                                
+                                if not ESP_Objects[player] then
+                                    ESP_Objects[player] = CreateNameTag(player, character)
+                                end
+                                
+                                if ESP_Objects[player] then
+                                    if ShowDistance then
+                                        ESP_Objects[player].distanceLabel.Text = string.format("%d", math.floor(distance))
+                                        ESP_Objects[player].distanceLabel.Visible = true
+                                    else
+                                        ESP_Objects[player].distanceLabel.Visible = false
+                                    end
+                                    
+                                    ESP_Objects[player].billboard.Enabled = true
+                                end
+                            else
+                                ClearPlayerESP(player)
+                            end
+                        else
+                            ClearPlayerESP(player)
+                        end
+                    end
+                end
+            end
+
+            local function SetupPlayerListeners()
+                Connections.playerAdded = Players.PlayerAdded:Connect(function(player)
+                    Connections["characterAdded_" .. player.UserId] = player.CharacterAdded:Connect(function(character)
+                        wait(0.5)
+                        UpdateESP()
+                    end)
+                end)
+                
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= Players.LocalPlayer then
+                        Connections["characterAdded_" .. player.UserId] = player.CharacterAdded:Connect(function(character)
+                            wait(0.5)
+                            UpdateESP()
+                        end)
+                    end
+                end
+            end
+
+            Connections.playerRemoving = Players.PlayerRemoving:Connect(function(player)
+                ClearPlayerESP(player)
+                if Connections["characterAdded_" .. player.UserId] then
+                    Connections["characterAdded_" .. player.UserId]:Disconnect()
+                end
+            end)
+
+            Connections.localCharacterAdded = Players.LocalPlayer.CharacterAdded:Connect(function()
+                wait(1)
+                for player in pairs(ESP_Objects) do
+                    ClearPlayerESP(player)
+                end
+                UpdateESP()
+            end)
+
+            Connections.heartbeat = RunService.Heartbeat:Connect(function()
+                if ESP_Enabled then
+                    UpdateESP()
+                end
+            end)
+
+            SetupPlayerListeners()
+            UpdateESP()
+
+            local ESPControl = {
+                toggle = function()
+                    ESP_Enabled = not ESP_Enabled
+                end,
+                
+                toggleDistance = function()
+                    ShowDistance = not ShowDistance
+                end,
+                
+                clearAll = function()
+                    for player in pairs(ESP_Objects) do
+                        ClearPlayerESP(player)
+                    end
+                    ESP_Objects = {}
+                end
+            }
+
+            _G.ESP = ESPControl
+
+            local function Cleanup()
+                for _, connection in pairs(Connections) do
+                    if connection then
+                        connection:Disconnect()
+                    end
+                end
+                
+                for player in pairs(ESP_Objects) do
+                    ClearPlayerESP(player)
+                end
+                
+                ESP_Objects = {}
+                Connections = {}
+                
+                _G.ESP = nil
+            end
+
+            if _G.__ESP_CLEANUP then
+                _G.__ESP_CLEANUP()
+            end
+
+            _G.__ESP_CLEANUP = Cleanup
+        end)
+    else
+        local success, err = pcall(function()
+            if _G.__ESP_CLEANUP then
+                _G.__ESP_CLEANUP()
+            end
+        end)
+    end
+end)
+
 
 local old
 old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(function(self, ...)
