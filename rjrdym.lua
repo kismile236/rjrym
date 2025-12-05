@@ -130,7 +130,7 @@ local workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local Player = Players.LocalPlayer
 local _ENV = (getgenv or getrenv or getfenv)()
-local Settings = {AutoClick = true, ClickDelay = 0.3}
+local Settings = {AutoClick = true, ClickDelay = 0.1} -- 固定攻速为0.1
 local Module = {}
 local _G = _G or getfenv(0)._G
 _G.FastAttack = _G.FastAttack ~= nil and _G.FastAttack or true
@@ -180,7 +180,7 @@ end
 Module.FastAttack = (function()
 	if _ENV.rz_FastAttack then return _ENV.rz_FastAttack end
 	local FastAttack = {
-		Distance = 500,
+		Distance = 700, -- 固定范围为700
 		attackMobs = true,
 		attackPlayers = true,
 		Equipped = nil,
@@ -281,19 +281,7 @@ attackTab:Toggle("开关", "FastAttackToggle", _G.FastAttack, function(state)
 	end
 end)
 
-attackTab:Textbox("范围", "AttackRange", "10000", function(text)
-	local num = tonumber(text) or 2500
-	num = math.floor(math.clamp(num, 1, 10000))
-	if _ENV.rz_FastAttack then
-		_ENV.rz_FastAttack.Distance = num
-	end
-end)
-
-attackTab:Textbox("攻速", "ClickDelay", "0.1", function(text)
-	local num = tonumber(text) or 0.1
-	num = math.round(math.clamp(num, 0.05, 2) * 100) / 100
-	Settings.ClickDelay = num
-end)
+-- 删除了范围和攻速的Textbox控件
 
 attackTab:Toggle("打怪物", "AttackMobsToggle", true, function(state)
 	if _ENV.rz_FastAttack then
@@ -319,7 +307,7 @@ task.spawn(function()
 					local Remotes, Net, RegisterAttack, RegisterHit, Enemies = CheckAndGetCoreComponents()
 					Module.FastAttack = Module.FastAttack or (function()
 						local FastAttack = {
-							Distance=500,
+							Distance=700, -- 固定范围为700
 							attackMobs=true,
 							attackPlayers=true,
 							Equipped=nil,
@@ -411,7 +399,6 @@ task.spawn(function()
 		end
 	end
 end)
-
 
 -- 移速功能
 
