@@ -140,7 +140,7 @@ local workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local Player = Players.LocalPlayer
 local _ENV = (getgenv or getrenv or getfenv)()
-local Settings = {AutoClick = true, ClickDelay = 0.1}
+local Settings = {AutoClick = true, ClickDelay = 0.3}
 local Module = {}
 local _G = _G or getfenv(0)._G
 _G.FastAttack = _G.FastAttack ~= nil and _G.FastAttack or true
@@ -299,8 +299,8 @@ attackTab:Textbox("范围", "AttackRange", "2500", function(text)
 	end
 end)
 
-attackTab:Textbox("攻速", "ClickDelay", "0.1", function(text)
-	local num = tonumber(text) or 0.1
+attackTab:Textbox("攻速", "ClickDelay", "0.3", function(text)
+	local num = tonumber(text) or 0.3
 	num = math.round(math.clamp(num, 0.05, 2) * 100) / 100
 	Settings.ClickDelay = num
 end)
