@@ -639,25 +639,20 @@ Players.PlayerAdded:Connect(function(player)
         UpdatePlayerESP(player)
     end
     
-    -- 监听后续角色重生
-    player.CharacterAdded:Connect(function(character)
-        -- 等待角色完全加载（确保有Head等部件）
-        local head = character:WaitForChild("Head", 5)
-        if head then
-            task.wait(0.2) -- 额外等待确保角色稳定
+Players.PlayerAdded:Connect(function(player)
+    if player ~= LocalPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(0.5)
             UpdatePlayerESP(player)
-        end
-    end)
-
-    player.CharacterRemoving:Connect(function()
-        CleanupPlayerESP(player)
-    end)
+        end)
+    end
 end)
 
 LocalPlayer.CharacterAdded:Connect(function()
-    task.wait(1) 
+    task.wait(1) -- 等待1秒，确保本地角色完全加载
     UpdateAllESP()
 end)
+
 
 
 about:Toggle("透视总开关", "ESP_Main", false, function(enabled)
