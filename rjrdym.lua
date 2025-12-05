@@ -458,11 +458,12 @@ end)
 
 local about = UITab4:section("透视",true)
 
+
 local ESPConfig = {
-    MainSwitch = false,       -- 透视总开关（默认关闭）
-    ShowNameDistance = false, -- 显示玩家名字+距离（默认关闭）
-    ShowTracer = false,       -- 射线追踪（默认关闭）
-    ShowHealth = false        -- 显示玩家血量（默认关闭）
+    MainSwitch = false,     
+    ShowNameDistance = false, 
+    ShowTracer = false,       
+    ShowHealth = false        
 }
 
 local ESPElements = {}
@@ -478,9 +479,9 @@ local function CreateNameDistanceHealthESP(player)
     local billboardGui = Instance.new("BillboardGui")
     billboardGui.Name = "NameDistanceHealthESP"
     billboardGui.Adornee = head -- 绑定到玩家头部
-    billboardGui.Size = UDim2.new(0, 140, 0, 50) -- 面板大小：宽140px，高80px
-    billboardGui.StudsOffset = Vector3.new(0, 3.5, 0)
-    billboardGui.AlwaysOnTop = true
+    billboardGui.Size = UDim2.new(0, 120, 0, 50) -- 面板大小
+    billboardGui.StudsOffset = Vector3.new(0, 3.5, 0) -- 面板偏移
+    billboardGui.AlwaysOnTop = true -- 显示在最上层
     billboardGui.Parent = head
     
     local nameLabel = Instance.new("TextLabel")
@@ -488,17 +489,17 @@ local function CreateNameDistanceHealthESP(player)
     nameLabel.BackgroundTransparency = 1 -- 背景透明
     nameLabel.Text = player.Name -- 显示玩家名字
     nameLabel.Size = UDim2.new(1, 0, 0.33, 0) -- 占面板高度的1/3
-    nameLabel.TextColor3 = Color3.new(1, 1, 1) -- 名字颜色：纯白色
-    nameLabel.TextScaled = true -- 自动缩放文本大小，适应面板
-    nameLabel.Font = Enum.Font.GothamSemibold -- 字体：加粗哥特字体
+    nameLabel.TextColor3 = Color3.new(1, 1, 1) -- 名字颜色 纯白色
+    nameLabel.TextScaled = true 
+    nameLabel.Font = Enum.Font.GothamSemibold -- 字体 加粗哥特字体
     
     local healthLabel = Instance.new("TextLabel")
     healthLabel.Parent = billboardGui
     healthLabel.BackgroundTransparency = 1 -- 背景透明
     healthLabel.Position = UDim2.new(0, 0, 0.33, 0) -- 位于名字标签下方
     healthLabel.Size = UDim2.new(1, 0, 0.33, 0) -- 占面板高度的1/3
-    healthLabel.TextColor3 = Color3.new(0, 1, 0) -- 初始血量颜色：绿色
-    healthLabel.TextScaled = true -- 自动缩放文本大小
+    healthLabel.TextColor3 = Color3.new(0, 1, 0) -- 初始血量颜色 绿色
+    healthLabel.TextScaled = true 
     healthLabel.Font = Enum.Font.Gotham -- 字体：普通哥特字体
     
     local distanceLabel = Instance.new("TextLabel")
@@ -506,7 +507,7 @@ local function CreateNameDistanceHealthESP(player)
     distanceLabel.BackgroundTransparency = 1 -- 背景透明
     distanceLabel.Position = UDim2.new(0, 0, 0.66, 0) -- 位于血量标签下方
     distanceLabel.Size = UDim2.new(1, 0, 0.33, 0) -- 占面板高度的1/3
-    distanceLabel.TextColor3 = Color3.new(1, 0.5, 0) -- 距离颜色
+    distanceLabel.TextColor3 = Color3.new(1, 0.5, 0) -- 距离颜色 橙色
     distanceLabel.TextScaled = true -- 自动缩放文本大小
     distanceLabel.Font = Enum.Font.Gotham -- 字体：普通哥特字体
     
@@ -517,13 +518,13 @@ local function CreateNameDistanceHealthESP(player)
         local targetRoot = player.Character:FindFirstChild("HumanoidRootPart")
         if localRoot and targetRoot then
             local distance = (localRoot.Position - targetRoot.Position).Magnitude
-            distanceLabel.Text = string.format("%.1f米", distance) 
+            distanceLabel.Text = string.format("%.1f米", distance)   
         end
         
         local humanoid = player.Character:FindFirstChild("Humanoid")
         if humanoid then
-            local health = math.floor(humanoid.Health)
-            local maxHealth = math.floor(humanoid.MaxHealth) 
+            local health = math.floor(humanoid.Health) -- 当前血量
+            local maxHealth = math.floor(humanoid.MaxHealth) -- 最大血量
             
             local healthPercent = health / maxHealth
             if healthPercent > 0.7 then
@@ -590,9 +591,9 @@ end
 local function UpdatePlayerESP(player)
     if player == LocalPlayer then return end
     
+    -- 确保角色存在
     if not player.Character then
-        player.CharacterAdded:Wait()
-        task.wait(0.5)
+        return -- 如果角色不存在，直接返回，等待CharacterAdded事件
     end
     
     if ESPConfig.MainSwitch and (ESPConfig.ShowNameDistance or ESPConfig.ShowHealth) then
@@ -631,21 +632,38 @@ local function UpdateAllESP()
 end
 
 Players.PlayerAdded:Connect(function(player)
-    if player ~= LocalPlayer then
-        player.CharacterAdded:Connect(function()
-            task.wait(0.5)
-            UpdatePlayerESP(player)
-        end)
+    if player == LocalPlayer then return end
+    
+    -- 立即处理当前角色（如果存在）
+    if player.Character then
+        task.wait(0.5) -- 等待角色完全加载
+        UpdatePlayerESP(player)
     end
+    
+    -- 监听后续角色重生
+    player.CharacterAdded:Connect(function(character)
+        -- 等待角色完全加载（确保有Head等部件）
+        local head = character:WaitForChild("Head", 5)
+        if head then
+            task.wait(0.2) -- 额外等待确保角色稳定
+            UpdatePlayerESP(player)
+        end
+    end)
+
+    player.CharacterRemoving:Connect(function()
+        CleanupPlayerESP(player)
+    end)
 end)
 
 LocalPlayer.CharacterAdded:Connect(function()
-    task.wait(1) -- 等待1秒，确保本地角色完全加载
+    task.wait(1) 
     UpdateAllESP()
 end)
 
-
-local about = UITab4:section("透视",true)
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(1) 
+    UpdateAllESP()
+end)
 
 about:Toggle("透视总开关", "ESP_Main", false, function(enabled)
     ESPConfig.MainSwitch = enabled
@@ -667,25 +685,11 @@ about:Toggle("射线追踪（屏幕中心）", "ESP_Tracer", false, function(ena
     UpdateAllESP()
 end)
 
-    for _, elements in pairs(ESPElements) do
-        for _, elem in pairs(elements) do
-            if typeof(elem) == "Instance" then
-                elem:Destroy()
-            elseif typeof(elem) == "RBXScriptConnection" then
-                elem:Disconnect()
-            elseif typeof(elem) == "Drawing" then
-                elem:Remove()
-            end
-        end
-    end
-    ESPElements = {}
-end)
-
+-- 初始加载所有玩家
 task.spawn(function()
-    task.wait(2) -- 等待
+    task.wait(2) 
     UpdateAllESP()
 end)
-
 local old
 old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(function(self, ...)
         local method = getnamecallmethod()
