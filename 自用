@@ -466,6 +466,7 @@ end)
 
 -- 透视功能
 local about = UITab4:section("透视",true)
+
 local ESPConfig = {
     MainSwitch = false,     
     ShowNameDistance = false, 
@@ -638,6 +639,9 @@ local function UpdateAllESP()
     end
 end
 
+Players.PlayerAdded:Connect(function(player)
+    if player == LocalPlayer then return end
+    
     -- 立即处理当前角色（如果存在）
     if player.Character then
         task.wait(0.5) -- 等待角色完全加载
@@ -657,6 +661,11 @@ end
     player.CharacterRemoving:Connect(function()
         CleanupPlayerESP(player)
     end)
+end)
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(1) 
+    UpdateAllESP()
 end)
 
 LocalPlayer.CharacterAdded:Connect(function()
@@ -689,7 +698,6 @@ task.spawn(function()
     task.wait(2) 
     UpdateAllESP()
 end)
-
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "人挤人脚本",
 	Text = "加载完成 祝您使用愉快",
