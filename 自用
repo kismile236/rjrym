@@ -466,8 +466,6 @@ end)
 
 -- 透视功能
 local about = UITab4:section("透视",true)
-
-
 local ESPConfig = {
     MainSwitch = false,     
     ShowNameDistance = false, 
@@ -600,9 +598,9 @@ end
 local function UpdatePlayerESP(player)
     if player == LocalPlayer then return end
     
+    -- 确保角色存在
     if not player.Character then
-        player.CharacterAdded:Wait()
-        task.wait(0.5) 
+        return -- 如果角色不存在，直接返回，等待CharacterAdded事件
     end
     
     if ESPConfig.MainSwitch and (ESPConfig.ShowNameDistance or ESPConfig.ShowHealth) then
@@ -641,12 +639,19 @@ local function UpdateAllESP()
 end
 
 Players.PlayerAdded:Connect(function(player)
-    if player ~= LocalPlayer then
-        player.CharacterAdded:Connect(function()
-            task.wait(0.5)
-            UpdatePlayerESP(player)
-        end)
+    if player == LocalPlayer then return end
+    
+    -- 立即处理当前角色（如果存在）
+    if player.Character then
+        task.wait(0.5) -- 等待角色完全加载
+        UpdatePlayerESP(player)
     end
+    
+    -- 监听后续角色重生
+    player.CharacterAdded:Connect(function()
+        task.wait(0.5) -- 等待角色完全加载
+        UpdatePlayerESP(player)
+    end)
 end)
 
 LocalPlayer.CharacterAdded:Connect(function()
@@ -674,28 +679,11 @@ about:Toggle("射线追踪（屏幕中心）", "ESP_Tracer", false, function(ena
     UpdateAllESP()
 end)
 
-
+-- 初始加载所有玩家
 task.spawn(function()
     task.wait(2) 
     UpdateAllESP()
 end)
-
-local old
-old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(function(self, ...)
-        local method = getnamecallmethod()
-        local args = {...}
-        if method == "SetCore" and args[1] == "SendNotification" then
-            local options = args[2]
-            if type(options) == "table" and 
-               tostring(options.Title) == "人挤人脚本" and 
-               tostring(options.Text) == "kismile制作" 
-            then
-                local modifiedOptions = table.clone(options)
-                modifiedOptions.Text = "1"
-            end
-        end
-     return old(self, ...)
-end))
 
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "人挤人脚本",
