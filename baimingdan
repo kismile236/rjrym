@@ -22,7 +22,6 @@ local WhitelistedPlayers = {
     ["liukaishuo366"] = true,
     ["CN_Wildfox"] = true,
     ["shenhaowen123"] = true,
-    ["ncy526526"] = true,
     ["Pskjdjjq"] = true,
     ["dgfd7666"] = true,
     ["mknhghv"] = true,
