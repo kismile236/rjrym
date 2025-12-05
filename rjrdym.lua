@@ -130,7 +130,7 @@ local workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local Player = Players.LocalPlayer
 local _ENV = (getgenv or getrenv or getfenv)()
-local Settings = {AutoClick = true, ClickDelay = 0.1} -- 固定攻速为0.1
+local Settings = {AutoClick = true, ClickDelay = 0.3} -- 固定攻速为0.1
 local Module = {}
 local _G = _G or getfenv(0)._G
 _G.FastAttack = _G.FastAttack ~= nil and _G.FastAttack or true
