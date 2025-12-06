@@ -123,8 +123,8 @@ about:Button("法天象地",function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile36/rjrzhongxing/refs/heads/main/rjr/fatianxiangdi"))()
 end)
 
-about:Button("皮脚本",function()
-	getgenv().XiaoPi="皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
+about:Button("fps优化（无法关闭）",function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile236/rjrym/refs/heads/main/fpsboost"))()
 end)
 
 about:Button("hoho",function()
