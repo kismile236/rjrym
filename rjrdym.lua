@@ -42,6 +42,10 @@ local about = UITab1:section("公告",true)
 about:Label("kismile制作")
 
 about:Label("脚本测试中")
+about:Label("免费脚本")
+about:Label("如果你是买的那你被骗了")
+
+
 
 local about = UITab2:section("超级无敌脚本",true)
 
