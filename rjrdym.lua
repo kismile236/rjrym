@@ -130,7 +130,7 @@ local workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local Player = Players.LocalPlayer
 local _ENV = (getgenv or getrenv or getfenv)()
-local Settings = {AutoClick = true, ClickDelay = 0.3} -- 固定攻速为0.1
+local Settings = {AutoClick = true, ClickDelay = 0.3} -- 攻速
 local Module = {}
 local _G = _G or getfenv(0)._G
 _G.FastAttack = _G.FastAttack ~= nil and _G.FastAttack or true
@@ -180,7 +180,7 @@ end
 Module.FastAttack = (function()
 	if _ENV.rz_FastAttack then return _ENV.rz_FastAttack end
 	local FastAttack = {
-		Distance = 550, -- 范围
+		Distance = 600, -- 范围
 		attackMobs = true,
 		attackPlayers = true,
 		Equipped = nil,
@@ -306,7 +306,7 @@ task.spawn(function()
 					local Remotes, Net, RegisterAttack, RegisterHit, Enemies = CheckAndGetCoreComponents()
 					Module.FastAttack = Module.FastAttack or (function()
 						local FastAttack = {
-							Distance=550, -- 范围
+							Distance=600, -- 范围
 							attackMobs=true,
 							attackPlayers=true,
 							Equipped=nil,
