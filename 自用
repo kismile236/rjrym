@@ -41,10 +41,11 @@ local workspace = game:GetService("Workspace")
 local Player = Players.LocalPlayer  
 local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile36/xing/refs/heads/main/rjr/ui.lua"))()
 local win = ui:new("人挤人中心")
-local UITab1 = win:Tab("三界昭告",'7734068321')
-local UITab2 = win:Tab("神术撼穹",'7734068321')
-local UITab3 = win:Tab("撼宇神刀",'7734068321')
-local UITab4 = win:Tab("万象显形",'7734068321')
+local UITab1 = win:Tab("公告",'7734068321')
+local UITab2 = win:Tab("脚本",'7734068321')
+local UITab3 = win:Tab("神刀",'7734068321')
+local UITab4 = win:Tab("透视",'7734068321')
+local UITab5 = win:Tab("传送",'7734068321')
 
 local about = UITab1:section("公告",true)
 
@@ -52,7 +53,7 @@ about:Label("kismile制作")
 
 about:Label("脚本测试中")
 
-local about = UITab2:section("神术撼穹",true)
+local about = UITab2:section("脚本",true)
 
 -- 视野功能
 
@@ -133,7 +134,7 @@ end)
 
 -- 大佛功能区
 
-local attackTab = UITab3:section("撼宇神刀",true)
+local attackTab = UITab3:section("神刀",true)
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local workspace = game:GetService("Workspace")
@@ -465,7 +466,7 @@ attackTab:Toggle("加速开关", "TranslateAccelToggle", false, function(State)
 end)
 
 -- 透视功能
-local about = UITab4:section("万象显形",true)
+local about = UITab4:section("透视",true)
 
 
 local ESPConfig = {
@@ -718,23 +719,20 @@ Players.PlayerAdded:Connect(function(player)
     end)
 end)
 
--- 本地玩家角色重生时更新所有ESP
 LocalPlayer.CharacterAdded:Connect(function()
     task.wait(1) 
     UpdateAllESP()
 end)
 
--- 添加定时更新机制，确保所有玩家ESP都能正确显示
 task.spawn(function()
     while true do
-        task.wait(3) -- 每3秒更新一次所有ESP
+        task.wait(3) 
         if ESPConfig.MainSwitch then
             UpdateAllESP()
         end
     end
 end)
 
--- UI开关处理
 about:Toggle("透视总开关", "ESP_Main", false, function(enabled)
     ESPConfig.MainSwitch = enabled
     UpdateAllESP()
@@ -765,3 +763,62 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
 	Text = "加载完成 祝您使用愉快",
 	Duration = 5;
 })
+
+local TP = UITab5:section("传送",true)
+
+
+TP:Button("传送至一海", function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelMain")
+end)
+
+TP:Button("传送至二海", function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
+end)
+
+TP:Button("传送至三海", function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
+end)
+
+TP:Button("传送至天鹅的房间", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(-287.37, 305.81, 592.98)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到豪宅:", targetPosition)
+    end
+end)
+
+TP:Button("传送至豪宅", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(2286.93, 15.06, 910.51)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到天鹅的房间:", targetPosition)
+    end
+end)
+
+TP:Button("传送至鬼船里", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(-6501.06, 83.11, -123.52)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到鬼船里:", targetPosition)
+    end
+end)
+
+TP:Button("传送至鬼船外", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(922.78, 123.96, 32842.40)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到鬼船外:", targetPosition)
+    end
+end)
