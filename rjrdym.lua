@@ -35,6 +35,7 @@ local UITab1 = win:Tab("公告",'7734068321')
 local UITab2 = win:Tab("超级无敌脚本",'7734068321')
 local UITab3 = win:Tab("大佛功能区",'7734068321')
 local UITab4 = win:Tab("透视",'7734068321')
+local UITab5 = win:Tab("传送",'7734068321')
 
 local about = UITab1:section("公告",true)
 
@@ -736,6 +737,68 @@ task.spawn(function()
     task.wait(2) 
     UpdateAllESP()
 end)
+
+
+
+local TP = UITab5:section("传送",true)
+
+
+TP:Button("传送至一海", function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelMain")
+end)
+
+TP:Button("传送至二海", function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
+end)
+
+TP:Button("传送至三海", function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
+end)
+
+TP:Button("传送至天鹅的房间", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(-287.37, 305.81, 592.98)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到豪宅:", targetPosition)
+    end
+end)
+
+TP:Button("传送至豪宅", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(2286.93, 15.06, 910.51)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到天鹅的房间:", targetPosition)
+    end
+end)
+
+TP:Button("传送至鬼船里", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(-6501.06, 83.11, -123.52)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到鬼船里:", targetPosition)
+    end
+end)
+
+TP:Button("传送至鬼船外", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local targetPosition = Vector3.new(922.78, 123.96, 32842.40)
+    
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("已传送到鬼船外:", targetPosition)
+    end
+end)
+
 local old
 old = hookmetamethod(game:GetService("StarterGui"), "__namecall", newcclosure(function(self, ...)
         local method = getnamecallmethod()
