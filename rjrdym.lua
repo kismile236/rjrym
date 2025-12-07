@@ -113,8 +113,8 @@ about:Button("法天象地",function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile36/rjrzhongxing/refs/heads/main/rjr/fatianxiangdi"))()
 end)
 
-about:Button("皮脚本",function()
-	getgenv().XiaoPi="皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
+about:Button("fps优化（无法关闭）",function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile236/rjrym/refs/heads/main/fpsboost"))()
 end)
 
 about:Button("hoho",function()
@@ -180,7 +180,7 @@ end
 Module.FastAttack = (function()
 	if _ENV.rz_FastAttack then return _ENV.rz_FastAttack end
 	local FastAttack = {
-		Distance = 700, -- 固定范围为700
+		Distance = 850, -- 固定范围为700
 		attackMobs = true,
 		attackPlayers = true,
 		Equipped = nil,
@@ -281,7 +281,6 @@ attackTab:Toggle("开关", "FastAttackToggle", _G.FastAttack, function(state)
 	end
 end)
 
--- 删除了范围和攻速的Textbox控件
 
 attackTab:Toggle("打怪物", "AttackMobsToggle", true, function(state)
 	if _ENV.rz_FastAttack then
@@ -307,7 +306,7 @@ task.spawn(function()
 					local Remotes, Net, RegisterAttack, RegisterHit, Enemies = CheckAndGetCoreComponents()
 					Module.FastAttack = Module.FastAttack or (function()
 						local FastAttack = {
-							Distance=700, -- 固定范围为700
+							Distance=850, -- 固定范围为700
 							attackMobs=true,
 							attackPlayers=true,
 							Equipped=nil,
@@ -402,7 +401,7 @@ end)
 
 -- 移速功能
 
-attackTab:Textbox("速度(推荐900）", "TranslateAccelSpeed", "输入速度值", function(Value)
+attackTab:Textbox("速度", "TranslateAccelSpeed", "输入速度值", function(Value)
     local speed = tonumber(Value)
     if speed then
         getfenv().translateSpeed = speed
