@@ -180,7 +180,7 @@ end
 Module.FastAttack = (function()
 	if _ENV.rz_FastAttack then return _ENV.rz_FastAttack end
 	local FastAttack = {
-		Distance = 850, -- 固定范围为700
+		Distance = 550, -- 范围
 		attackMobs = true,
 		attackPlayers = true,
 		Equipped = nil,
@@ -306,7 +306,7 @@ task.spawn(function()
 					local Remotes, Net, RegisterAttack, RegisterHit, Enemies = CheckAndGetCoreComponents()
 					Module.FastAttack = Module.FastAttack or (function()
 						local FastAttack = {
-							Distance=850, -- 固定范围为700
+							Distance=550, -- 范围
 							attackMobs=true,
 							attackPlayers=true,
 							Equipped=nil,
