@@ -122,8 +122,8 @@ about:Button("fps优化（无法关闭）",function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile236/rjrym/refs/heads/main/fpsboost"))()
 end)
 
-about:Button("hoho",function()
-	loadstring(game:HttpGet('https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI'))()
+about:Button("皮脚本",function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/kismile236/rjrym/refs/heads/main/pi"))()
 end)
 
 -- 大佛功能区
