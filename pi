@@ -1,37 +1,6 @@
---XI团队开源 狗屎皮脚本加入联邦 得罪XI
---Rb脚本中心修复源码↓
 
 
-game:GetService("StarterGui"):SetCore("SendNotification", {
-  Title = "皮脚本",
-  Text = "欢迎使用皮脚本",
-  Icon = "rbxassetid://18941716391",
-  Duration = 1,
-  Callback = bindable,
-  Button1 = "脚本功能多多",
-  Button2 = "感谢您的使用",
-})
-wait(1.5)
-game:GetService("StarterGui"):SetCore("SendNotification", {
-  Title = "皮脚本",
-  Text = "皮脚本已重做 本来想搞成检测服务器ID的 后面还是因为麻烦 就不搞了",
-  Icon = "rbxassetid://18941716391",
-  Duration = 1,
-  Callback = bindable,
-  Button1 = "此脚本是永久免费的",
-  Button2 = "请勿倒卖",
-})
-wait(1.5)
-game:GetService("StarterGui"):SetCore("SendNotification", {
-  Title = "皮脚本",
-  Text = "每周都会更新几个服务器 更新有点慢 请见谅",
-  Icon = "rbxassetid://18941716391",
-  Duration = 2,
-  Callback = bindable,
-  Button1 = "祝您使用愉快",
-  Button2 = "玩的开心",
-})
-wait(1.5)
+
 local VirtualUserService = game:GetService("VirtualUser")
 game:GetService("Players").LocalPlayer.Idled:connect(function()
   
